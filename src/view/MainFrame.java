@@ -6,15 +6,13 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Toolkit;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.BorderLayout;
 
 public class MainFrame extends JFrame {
-	private JPanel contentPane;
+	private static final long serialVersionUID = 1L;
 
-	public static JPanel cardsPanel;
-	public static CardLayout cardLayout;
+	private JPanel contentPane;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -31,9 +29,9 @@ public class MainFrame extends JFrame {
 
 	public MainFrame() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainFrame.class.getResource("/images/logo_siga.jpg")));
-		setTitle("Sistema de eleição da CIPA.");
+		setTitle("Sistema de eleição da CIPA");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(new Dimension(430, 350));
+		setSize(new Dimension(750, 450));
 		setResizable(false);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
@@ -41,15 +39,13 @@ public class MainFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
-		cardsPanel = new JPanel(new CardLayout());
-		cardsPanel.add(new MenuPanel(), "menu");
-		cardsPanel.add(new CadidateRegistrationPanel(), "register");
-		cardsPanel.add(new CountingOfVotesPanel(), "counting of votes");
-		cardsPanel.add(new VotingPanel(), "voting");
+		add(new MenuPanel(this));
+	}
 
-		contentPane.add(cardsPanel, BorderLayout.CENTER);
-
-		cardLayout = (CardLayout) (cardsPanel.getLayout());
-		cardLayout.show(cardsPanel, "menu");
+	public static void changeTo(JFrame frame, JPanel current, JPanel next) {
+		frame.remove(current);
+		frame.add(next);
+		frame.repaint();
+		frame.revalidate();
 	}
 }

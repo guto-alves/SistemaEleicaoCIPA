@@ -1,7 +1,6 @@
 package model;
 
 public class Candidate {
-	private int id;
 	private int number;
 	private String name;
 	private String nickname;
@@ -13,10 +12,11 @@ public class Candidate {
 	public Candidate() {
 	}
 
-	public Candidate(int id, int number, String name, String nickname, int age, String sector, String serviceTime,
-			int votes) {
-		super();
-		this.id = id;
+	public Candidate(int number, String name, String nickname, int age, String sector, String serviceTime) {
+		this(number, name, nickname, age, sector, serviceTime, 0);
+	}
+
+	public Candidate(int number, String name, String nickname, int age, String sector, String serviceTime, int votes) {
 		this.number = number;
 		this.name = name;
 		this.nickname = nickname;
@@ -24,14 +24,6 @@ public class Candidate {
 		this.sector = sector;
 		this.serviceTime = serviceTime;
 		this.votes = votes;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public int getNumber() {
