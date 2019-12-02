@@ -12,7 +12,7 @@ import java.util.List;
 import model.Candidate;
 
 public class Database {
-	public static String DATABASE_NAME = "database.db";
+	public static String DATABASE_NAME = "./src/database.db";
 
 	private Connection connection;
 
