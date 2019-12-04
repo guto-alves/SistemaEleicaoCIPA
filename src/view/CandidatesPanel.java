@@ -3,8 +3,9 @@ package view;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+
 import java.text.ParseException;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.Color;
@@ -12,9 +13,9 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.text.MaskFormatter;
 
+import controller.Shortcut;
 import database.Database;
 import model.Candidate;
 
@@ -24,7 +25,6 @@ import javax.swing.JFrame;
 
 import java.awt.Font;
 import javax.swing.ImageIcon;
-import javax.swing.InputMap;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -34,7 +34,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import java.awt.Dimension;
@@ -50,7 +49,7 @@ public class CandidatesPanel extends JPanel {
 	private JTextField nicknameTextField;
 	private JFormattedTextField ageTextField;
 	private JTextField sectorTextField;
-	private JTextField fotoTextField;
+	private JTextField photoTextField;
 	private JTextField serviceTimeTextField;
 
 	private JTable table;
@@ -131,9 +130,9 @@ public class CandidatesPanel extends JPanel {
 		JLabel lblFoto = new JLabel("Foto:");
 		candidateRegistrationPanel.add(lblFoto);
 
-		fotoTextField = new JTextField();
-		candidateRegistrationPanel.add(fotoTextField);
-		fotoTextField.setColumns(5);
+		photoTextField = new JTextField();
+		candidateRegistrationPanel.add(photoTextField);
+		photoTextField.setColumns(5);
 
 		JLabel lblNewLabel_1 = new JLabel("Tempo de servi\u00E7o:");
 		candidateRegistrationPanel.add(lblNewLabel_1);
@@ -173,13 +172,13 @@ public class CandidatesPanel extends JPanel {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setDefaultRenderer(Object.class, new CellRenderer());
 		table.setSelectionBackground(new Color(50, 205, 50));
-		addShortcutListenerToDeleteCandidate(table);
+		Shortcut.addListener(table, action, JComponent.WHEN_FOCUSED, "DELETE");
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBackground(Color.WHITE);
 		add(scrollPane, BorderLayout.EAST);
 	}
 
-	private ActionListener registerButtonListener = new ActionListener() {
+	private final ActionListener registerButtonListener = new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -233,33 +232,28 @@ public class CandidatesPanel extends JPanel {
 		ageTextField.setText("");
 		sectorTextField.setText("");
 		serviceTimeTextField.setText("");
-		fotoTextField.setText("");
+		photoTextField.setText("");
 	}
 
-	private void addShortcutListenerToDeleteCandidate(JTable table) {
-		ActionMap actionMap = new ActionMap();
-		actionMap.put("deleteCandidate", new AbstractAction() {
+	private final AbstractAction action = new AbstractAction() {
+		private static final long serialVersionUID = 1L;
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int result = JOptionPane.showConfirmDialog(CandidatesPanel.this,
-						"Tem certeza que deseja excluir o candidato selecionado?", "Excluir Candidato",
-						JOptionPane.OK_CANCEL_OPTION);
-				if (result == 0) {
-					int candidateIndex = table.getSelectedRow();
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int result = JOptionPane.showConfirmDialog(CandidatesPanel.this,
+					"Tem certeza que deseja excluir o candidato selecionado?", "Excluir Candidato",
+					JOptionPane.OK_CANCEL_OPTION);
+			if (result == 0) {
+				int candidateIndex = table.getSelectedRow();
 
-					Candidate candidate = candidates.get(candidateIndex);
+				Candidate candidate = candidates.get(candidateIndex);
 
-					database.deleteCandidate(candidate);
-					candidates.remove(candidateIndex);
+				database.deleteCandidate(candidate);
+				candidates.remove(candidateIndex);
 
-					candidateTableModel.fireTableDataChanged();
-				}
+				candidateTableModel.fireTableDataChanged();
 			}
-		});
-		table.setActionMap(actionMap);
+		}
+	};
 
-		InputMap inputMap = table.getInputMap(JTable.WHEN_FOCUSED);
-		inputMap.put(KeyStroke.getKeyStroke("DELETE"), "deleteCandidate");
-	}
 }

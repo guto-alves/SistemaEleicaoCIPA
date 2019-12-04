@@ -26,7 +26,7 @@ public class RecordingVotePanel extends JPanel implements ActionListener {
 	private JProgressBar progressBar;
 	private int progress;
 
-	Timer timer = new Timer(25, this);
+	Timer timer = new Timer(15, this);
 
 	private JFrame frame;
 	private Component verticalStrut;
@@ -93,9 +93,10 @@ public class RecordingVotePanel extends JPanel implements ActionListener {
 					try {
 						Thread.sleep(1200);
 					} catch (InterruptedException e) {
-						Thread.interrupted();
+						Thread.currentThread().interrupt();
 						e.printStackTrace();
 					}
+
 					MainFrame.changeTo(frame, RecordingVotePanel.this, new VotingPanel(frame));
 				};
 			}.start();

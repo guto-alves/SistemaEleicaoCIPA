@@ -8,6 +8,8 @@ import database.Database;
 import model.Candidate;
 
 public class CandidateTableModel extends AbstractTableModel {
+	private static final long serialVersionUID = 1L;
+
 	private List<Candidate> candidates;
 
 	private String[] columnNames = { "Número", "Nome", "Apelido", "Idade", "Setor", "Tempo" };
