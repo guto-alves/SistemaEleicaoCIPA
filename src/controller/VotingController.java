@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import database.Database;
 import model.Candidate;
+import sounds.Sound;
 import view.MainFrame;
 import view.RecordingVotePanel;
 
@@ -120,6 +121,8 @@ public class VotingController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			Sound.play();
+
 			if (voteBlank)
 				registerVote(-1);
 			else if (voteNull)
